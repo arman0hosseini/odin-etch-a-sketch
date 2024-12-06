@@ -1,39 +1,8 @@
-const container = document.querySelector(".container");
-const dimButton = document.querySelector(".dimension");
-const randomButton = document.querySelector(".random");
-const darker = document.querySelector(".darker");
-let n = 4;
-let randomColor = false;
-let darkerState = false;
+function randomNumber(n) {
+    return Math.floor(Math.random() * n);
+}
 
-randomButton.addEventListener("click",
-    function () {
-        if (randomColor) {
-            randomColor = false;
-        }
-        else {
-            randomColor = true;
-        }
-    }
-)
-
-dimButton.addEventListener("click",
-    function () {
-        n = Number(prompt("Enter the dimension of the thing", 4));
-        if (!(n > 70)) {
-            container.innerHTML = "";
-            gridMaker(n);
-        }
-        else {
-            n = 70;
-            container.innerHTML = "";
-            gridMaker(n);
-
-        }
-    }
-)
-
-function gridMaker(n) {
+function setGrid(n) {
     for (let i = 0; i < n * n; i++) {
         const box = document.createElement("div");
         box.classList.add("box");
@@ -41,21 +10,109 @@ function gridMaker(n) {
         container.appendChild(box);
     }
 }
-gridMaker(n);
 
-container.addEventListener("mousemove",
-    function (e) {
-        let target = e.target;
+//Default Grid
+const container = document.querySelector(".display");
+let n = 4;
+setGrid(4);
+
+//Dimension Button
+const dimensionBtn = document.querySelector(".dimension");
+dimensionBtn.addEventListener("click",
+    function () {
+        let userInput = Number(prompt("Enter the dimension of the board"));
+        if (userInput >= 70) {
+            container.innerHTML = "";
+            setGrid(70);
+        }
+        else {
+            container.innerHTML = "";
+            setGrid(userInput);
+        }
+    }
+)
+
+
+//Buttons ----------
+//Pen Button
+const penBtn = document.querySelector(".pen");
+let penBtnState = true;
+penBtn.addEventListener("click",
+    function () {
+        if (penBtnState) {
+            penBtnState = false;
+            penBtn.style["background-color"] = "lightcoral";
+        }
+        else {
+            penBtnState = true;
+            penBtn.style["background-color"] = "lightgreen";
+            randomBtnState = false;
+            randomBtn.style["background-color"] = "lightcoral";
+            eraserBtnState = false;
+            eraserBtn.style["background-color"] = "lightcoral";
+
+        }
+    }
+)
+
+//Optional Eraser Button
+const eraserBtn = document.querySelector(".eraser");
+let eraserBtnState = false;
+eraserBtn.addEventListener("click",
+    function () {
+        if (eraserBtnState) {
+            eraserBtnState = false;
+            eraserBtn.style["background-color"] = "lightcoral";
+        }
+        else {
+            eraserBtnState = true;
+            eraserBtn.style["background-color"] = "lightgreen";
+            penBtnState = false;
+            penBtn.style["background-color"] = "lightcoral";
+            randomBtnState = false;
+            randomBtn.style["background-color"] = "lightcoral";
+
+        }
+    }
+)
+
+//Random Button
+const randomBtn = document.querySelector(".random");
+let randomBtnState = false;
+randomBtn.addEventListener("click",
+    function () {
+        if (randomBtnState) {
+            randomBtnState = false;
+            randomBtn.style["background-color"] = "lightcoral";
+        }
+        else {
+            randomBtnState = true;
+            randomBtn.style["background-color"] = "lightgreen";
+            penBtnState = false;
+            penBtn.style["background-color"] = "lightcoral";
+            eraserBtnState = false;
+            eraserBtn.style["background-color"] = "lightcoral";
+        }
+    }
+)
+
+
+
+//Mouse Move Behavior
+container.addEventListener("mouseover",
+    function (event) {
+        const target = event.target;
         if (target.className == "box") {
-            if (randomColor == false) {
+            if (penBtnState) {
                 target.style["background-color"] = "rgb(0,0,0)";
             }
-            else {
-                let randomNumber1 = Math.round(Math.random() * 255);
-                let randomNumber2 = Math.round(Math.random() * 255);
-                let randomNumber3 = Math.round(Math.random() * 255);
-                target.style["background-color"] = `rgb(${randomNumber1},${randomNumber2},${randomNumber3})`;
+            else if (randomBtnState) {
+                target.style["background-color"] = `rgb(${randomNumber(256)},${randomNumber(256)},${randomNumber(256)})`;
+            }
+            else if (eraserBtnState) {
+                target.style["background-color"] = `rgb(255,255,255)`;
             }
         }
     }
 )
+
