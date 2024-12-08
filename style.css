@@ -51,5 +51,6 @@ button.pen {
 }
 
 .box {
+  background-color: rgb(255, 255, 255);
   border: 1px solid lightgray;
 }

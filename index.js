@@ -16,6 +16,8 @@ const container = document.querySelector(".display");
 let n = 4;
 setGrid(4);
 
+
+//Buttons ----------
 //Dimension Button
 const dimensionBtn = document.querySelector(".dimension");
 dimensionBtn.addEventListener("click",
@@ -33,7 +35,6 @@ dimensionBtn.addEventListener("click",
 )
 
 
-//Buttons ----------
 //Pen Button
 const penBtn = document.querySelector(".pen");
 let penBtnState = true;
@@ -50,6 +51,8 @@ penBtn.addEventListener("click",
             randomBtn.style["background-color"] = "lightcoral";
             eraserBtnState = false;
             eraserBtn.style["background-color"] = "lightcoral";
+            darkBtnState = false;
+            darkBtn.style["background-color"] = "lightcoral";
 
         }
     }
@@ -71,7 +74,31 @@ eraserBtn.addEventListener("click",
             penBtn.style["background-color"] = "lightcoral";
             randomBtnState = false;
             randomBtn.style["background-color"] = "lightcoral";
+            darkBtnState = false;
+            darkBtn.style["background-color"] = "lightcoral";
 
+        }
+    }
+)
+
+//Darkener Button
+const darkBtn = document.querySelector(".darkener");
+let darkBtnState = false;
+darkBtn.addEventListener("click",
+    function () {
+        if (darkBtnState) {
+            darkBtnState = false;
+            darkBtn.style["background-color"] = "lightcoral";
+        }
+        else {
+            darkBtnState = true;
+            darkBtn.style["background-color"] = "lightgreen";
+            randomBtnState = false;
+            randomBtn.style["background-color"] = "lightcoral";
+            eraserBtnState = false;
+            eraserBtn.style["background-color"] = "lightcoral";
+            penBtnState = false;
+            penBtn.style["background-color"] = "lightcoral";
         }
     }
 )
@@ -92,6 +119,8 @@ randomBtn.addEventListener("click",
             penBtn.style["background-color"] = "lightcoral";
             eraserBtnState = false;
             eraserBtn.style["background-color"] = "lightcoral";
+            darkBtnState = false;
+            darkBtn.style["background-color"] = "lightcoral";
         }
     }
 )
@@ -112,7 +141,34 @@ container.addEventListener("mouseover",
             else if (eraserBtnState) {
                 target.style["background-color"] = `rgb(255,255,255)`;
             }
+            else if (darkBtnState) {
+                target.style["background-color"] = darkenerPen(target);
+            }
         }
     }
 )
 
+
+
+
+//Darkener Functio
+/**
+ * 
+ * @param {Element} targetElement 
+ */
+function darkenerPen(targetElement) {
+    let currentCSSValue = targetElement.style["background-color"];
+    if (!currentCSSValue) {
+        currentCSSValue = "rgb(255,255,255)";
+    }
+    const pFirstIndex = currentCSSValue.indexOf("(");
+    const pLastIndex = currentCSSValue.lastIndexOf(")");
+    let colors = currentCSSValue.slice(pFirstIndex + 1, pLastIndex);
+    let colorArray = colors.split(",");
+    let newColorArray = colorArray.map(
+        function (value) {
+            return Math.floor(+(value) * 0.9);
+        }
+    )
+    return `rgb(${newColorArray.join(",")})`
+}
