@@ -167,7 +167,8 @@ function darkenerPen(targetElement) {
     let colorArray = colors.split(",");
     let newColorArray = colorArray.map(
         function (value) {
-            return Math.floor(+(value) * 0.9);
+            console.log(value);
+            return Math.floor(Number(value) - 25);
         }
     )
     return `rgb(${newColorArray.join(",")})`
